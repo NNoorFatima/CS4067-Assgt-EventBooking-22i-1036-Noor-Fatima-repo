@@ -1,22 +1,15 @@
-# main.py
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from app import models, crud  # ✅ Correct import
-from app.database import SessionLocal, engine, Base  # ✅ Correct
+from fastapi import FastAPI
+from app.routes.user_routes import router  # ✅ FIXED IMPORT
+from app.database import engine
+from app.models import Base
 
 app = FastAPI()
 
-# Create tables
+# Initialize database tables
 Base.metadata.create_all(bind=engine)
 
-# Dependency for DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(router, prefix="/users", tags=["Users"])
 
-@app.post("/users/")
-def create_user(username: str, email: str, password: str, db: Session = Depends(get_db)):
-    return crud.create_user(db, username, email, password)
+@app.get("/")
+def health_check():
+    return {"status": "User Service is Running"}
