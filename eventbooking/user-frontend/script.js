@@ -1,6 +1,6 @@
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "http://127.0.0.1:8000";  // FastAPI Backend URL
 
-// ✅ Register User
+//Register User
 document.addEventListener("DOMContentLoaded", function () {
     const registerForm = document.getElementById("registerForm");
     if (registerForm) {
@@ -10,19 +10,32 @@ document.addEventListener("DOMContentLoaded", function () {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             
+            try {
             const response = await fetch(`${API_BASE_URL}/users/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, email, password })
             });
 
+
+
             const result = await response.json();
+            if (response.ok) {
+                alert("Registration successful! Redirecting to login...");
+                window.location.href = "login.html"; // Redirects to login page
+            } else {
+                document.getElementById("registerMessage").innerText = result.detail || "Registration failed!";
+            }
             document.getElementById("registerMessage").innerText = result.message;
+        } catch(error) {
+            nsole.error("Registration failed:", error);
+            alert("Error registering. Check console for details.");
+        }
         });
     }
 });
 
-// ✅ Login User
+// Login User
 document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
@@ -40,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
             if (response.ok) {
                 localStorage.setItem("token", result.access_token);
+                alert("Login successful! Redirecting to dashboard...");
                 window.location.href = "dashboard.html";
             } else {
                 document.getElementById("loginMessage").innerText = "Invalid credentials!";
@@ -48,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ✅ Fetch User Info (Dashboard)
+// Fetch User Info (Dashboard)
 document.addEventListener("DOMContentLoaded", function () {
     if (window.location.pathname.includes("dashboard.html")) {
         const token = localStorage.getItem("token");
@@ -71,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ✅ Logout Function
+//logout Function
 function logout() {
     localStorage.removeItem("token");
     window.location.href = "login.html";
