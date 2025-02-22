@@ -6,7 +6,7 @@ from app.models import Base
 
 app = FastAPI()
 # enable cors
-apps.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all frontend requests (for development only)
     allow_credentials=True,
