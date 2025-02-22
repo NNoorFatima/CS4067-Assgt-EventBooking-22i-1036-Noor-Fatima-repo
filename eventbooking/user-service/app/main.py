@@ -1,9 +1,18 @@
 from fastapi import FastAPI
-from app.routes.user_routes import router  # ✅ FIXED IMPORT
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes.user_routes import router  
 from app.database import engine
 from app.models import Base
 
 app = FastAPI()
+# enable cors
+apps.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all frontend requests (for development only)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
