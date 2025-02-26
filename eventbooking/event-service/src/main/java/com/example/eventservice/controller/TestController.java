@@ -18,9 +18,9 @@ public class TestController {
     public String checkMongoConnection() {
         try {
             mongoClient.listDatabaseNames(); // Query MongoDB to check the connection
-            return "✅ Connected to MongoDB Atlas!";
+            return " Connected to MongoDB Atlas!";
         } catch (Exception e) {
-            return "❌ MongoDB Connection Failed: " + e.getMessage();
+            return "cs MongoDB Connection Failed: " + e.getMessage();
         }
     }
 }

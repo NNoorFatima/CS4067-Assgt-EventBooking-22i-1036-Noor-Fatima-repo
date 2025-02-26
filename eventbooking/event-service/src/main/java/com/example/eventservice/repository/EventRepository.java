@@ -5,6 +5,5 @@ import com.example.eventservice.model.Event;
 import java.util.List;
 
 public interface EventRepository extends MongoRepository<Event, String> {
-    List<Event> findByTitleContaining(String title);
+    List<Event> findByNameContaining(String name);
 }
-    
