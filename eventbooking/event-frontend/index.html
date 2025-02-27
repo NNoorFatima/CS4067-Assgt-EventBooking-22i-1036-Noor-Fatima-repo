@@ -10,10 +10,14 @@
     <h1>Event Management</h1>
 
     <form id="eventForm">
-        <input type="text" id="eventTitle" placeholder="Event Title" required>
-        <input type="datetime-local" id="eventDate" required>
+        <input type="text" id="eventName" placeholder="Event Name">
+        <input type="text" id="eventDescription" placeholder="Description">
+        <input type="datetime-local" id="eventDate">
+        <input type="text" id="eventLocation" placeholder="Location">
+        <input type="number" id="eventCapacity" placeholder="Capacity">
+        <input type="number" id="eventPrice" placeholder="Price">
         <button type="submit">Add Event</button>
-    </form>
+      </form>
 
     <h2>Upcoming Events</h2>
     <ul id="eventList"></ul>

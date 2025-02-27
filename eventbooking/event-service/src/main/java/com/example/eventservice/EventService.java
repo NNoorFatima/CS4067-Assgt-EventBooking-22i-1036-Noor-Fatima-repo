@@ -23,6 +23,9 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
+        if (event.getName() == null || event.getDateTime() == null) {
+            throw new RuntimeException("Missing required fields");
+        }
         return eventRepository.save(event);
     }
     public Event updateEvent(String id, Event updatedEvent) {

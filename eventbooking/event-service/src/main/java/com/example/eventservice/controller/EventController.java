@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
-
+@CrossOrigin(origins = "*") // Adjust port if needed
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
