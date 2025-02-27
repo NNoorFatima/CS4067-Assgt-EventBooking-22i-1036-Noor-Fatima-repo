@@ -26,13 +26,13 @@ def get_db():
 
 @router.post("/register")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.username == user.username).first()
+    existing_user = db.query(User).filter(User.username == user.username).first() #chekc if user exist
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
 
-    hashed_pw = hash_password(user.password)
-    new_user = User(username=user.username, email=user.email, hashed_password=hashed_pw)
-    db.add(new_user)
+    hashed_pw = hash_password(user.password) #store hashed pass
+    new_user = User(username=user.username, email=user.email, hashed_password=hashed_pw) #new user obj
+    db.add(new_user) #save to db
     db.commit()
     db.refresh(new_user)
     return {"message": "User registered successfully"}

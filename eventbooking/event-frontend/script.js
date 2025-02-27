@@ -50,7 +50,7 @@ async function loadEvents() {
     events.forEach(event => {
         const li = document.createElement("li");
         li.innerHTML = `
-             ${event.name || "No Name"} - ${event.dateTime ? new Date(event.dateTime).toLocaleString() : "Invalid Date"}
+             ${event.name || "No Name"} --- ${event.dateTime ? new Date(event.dateTime).toLocaleString() : "Invalid Date"}
             <br> Location: ${event.location || "No Location"}
             <br> Price: $${event.price || "0.00"}
             <br> Capacity: ${event.capacity || "0"} people

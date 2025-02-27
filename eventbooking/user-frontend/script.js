@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify({ username, email, password })
             });
 
-
-
             const result = await response.json();
             if (response.ok) {
                 alert("Registration successful! Redirecting to login...");
