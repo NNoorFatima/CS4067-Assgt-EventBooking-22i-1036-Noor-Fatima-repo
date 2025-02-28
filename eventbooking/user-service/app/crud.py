@@ -14,4 +14,3 @@ def create_user(db: Session, username: str, email: str, password: str):
     return new_user
 
 
-
