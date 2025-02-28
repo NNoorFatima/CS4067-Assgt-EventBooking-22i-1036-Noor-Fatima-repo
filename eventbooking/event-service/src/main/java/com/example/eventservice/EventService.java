@@ -1,7 +1,5 @@
 package com.example.eventservice.service;
 
-
-
 import com.example.eventservice.model.Event;
 import com.example.eventservice.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
