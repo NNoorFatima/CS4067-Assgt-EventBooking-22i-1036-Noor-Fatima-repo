@@ -50,9 +50,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const result = await response.json();
             if (response.ok) {
+
                 localStorage.setItem("token", result.access_token);
-                alert("Login successful! Redirecting to dashboard...");
-                window.location.href = "dashboard.html";
+                //alert("Login successful! Redirecting to dashboard...");
+                ///window.location.href = "dashboard.html";
+                
+
+                let choice = confirm("Login Successful! \nDo you want to Add an Event or Book an Event?\n\nClick 'OK' for Add Event, 'Cancel' for Book Event.");
+
+                if (choice) { //eventbooking\event-frontend\index.html
+                    window.location.href = "../event-frontend/index.html"; // Redirect to Add Event
+                } else {
+                    window.location.href = "dashboard.html"; // Redirect to Book Event
+                }
             } else {
                 document.getElementById("loginMessage").innerText = "Invalid credentials!";
             }
