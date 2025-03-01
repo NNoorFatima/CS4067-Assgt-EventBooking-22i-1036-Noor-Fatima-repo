@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import requests
+import random
+
 
 app = Flask(__name__)
 
@@ -54,6 +56,31 @@ def create_booking():
     db.session.commit()
 
     return jsonify({"booking_id": new_booking.id, "status": "Pending"}), 201
+
+
+
+@app.route('/payments', methods=['POST'])
+def process_payment():
+    data = request.json
+    booking_id = data.get("booking_id")
+
+    # Check if booking exists
+    booking = Booking.query.get(booking_id)
+    if not booking:
+        return jsonify({"error": "Booking not found"}), 404
+
+    # Simulate payment success or failure
+    payment_success = random.choice([True, False])
+
+    if payment_success:
+        booking.payment_status = "Paid"
+        booking.status = "Confirmed"  # Booking is confirmed after successful payment
+        db.session.commit()
+        return jsonify({"message": "Payment successful!", "booking_id": booking.id, "status": booking.status}), 200
+    else:
+        booking.payment_status = "Failed"
+        db.session.commit()
+        return jsonify({"message": "Payment failed. Please try again.", "booking_id": booking.id, "status": booking.status}), 400
 
 
 # ✅ Move `if __name__ == "__main__":` to the end
