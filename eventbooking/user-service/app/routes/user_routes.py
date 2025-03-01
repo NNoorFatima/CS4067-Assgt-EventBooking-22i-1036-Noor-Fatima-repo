@@ -67,7 +67,11 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
     #generate JWT token
     access_token = create_access_token(data={"sub": user.username}, expires_delta=timedelta(minutes=30))
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "id": db_user.id,
+        "username":user.username,
+        "access_token": access_token, 
+        "token_type": "bearer"}
 
 EVENT_SERVICE_URL = "http://localhost:8080/api/events"
 # Fetch events from Event Service
