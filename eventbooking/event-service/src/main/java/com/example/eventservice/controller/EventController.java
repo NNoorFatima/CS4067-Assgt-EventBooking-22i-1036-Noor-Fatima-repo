@@ -8,17 +8,30 @@ import com.example.eventservice.model.Event;
 import com.example.eventservice.repository.EventRepository;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
+import java.util.Map;
+import java.util.Collections;  
+
+
+import java.util.HashMap;
+import org.springframework.http.HttpStatus;
+
+
 
 @CrossOrigin(origins = "*") // Adjust port if needed
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
+    private final EventRepository eventRepository;
 
     @Autowired
     private EventService eventService;
+    @Autowired
+    public EventController(EventRepository eventRepository, EventService eventService) {
+        this.eventRepository = eventRepository;
+        this.eventService = eventService;
+    }
 
     // Get all events
     @GetMapping
@@ -56,6 +69,30 @@ public class EventController {
         eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
     }
+
+    //Decrease Event Capacity
+    @PutMapping("/{eventId}/decrease_capacity")
+    public ResponseEntity<Map<String, String>> decreaseCapacity(@PathVariable String eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+
+        if (!eventOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", "Event not found"));
+        }
+
+        Event event = eventOptional.get();
+        if (event.getCapacity() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", "Event is fully booked"));
+        }
+
+        // ✅ Reduce capacity
+        event.setCapacity(event.getCapacity() - 1);
+        eventRepository.save(event);
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Event capacity updated"));
+    }
+
 
 
 }

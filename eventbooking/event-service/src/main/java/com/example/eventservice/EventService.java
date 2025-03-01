@@ -43,5 +43,17 @@ public class EventService {
     public void deleteEvent(String id) {
         eventRepository.deleteById(id);
     }
+    public boolean decreaseCapacity(String eventId) {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            if (event.getCapacity() > 0) {
+                event.setCapacity(event.getCapacity() - 1);
+                eventRepository.save(event);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
