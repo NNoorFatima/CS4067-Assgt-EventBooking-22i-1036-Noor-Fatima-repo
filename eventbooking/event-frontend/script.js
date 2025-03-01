@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded",() =>{ //wait for the page to load
 async function loadEvents() {
     const response = await fetch(API_URL);  //This fetches (GET) all events from the backend.
     const events = await response.json();//converts reponse to javascript array
+    localStorage.setItem("eventsData", JSON.stringify(events)); //  Store events locally
     const eventList = document.getElementById("eventList");//find the element where events will be shown 
     eventList.innerHTML = "";//clear previous data before adding new one
     
