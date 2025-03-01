@@ -81,7 +81,7 @@ async def get_events():
 
         return response.json()
 
-@router.get("/", response_model=List[UserResponse])  # ✅ Use Pydantic Model Instead
+@router.get("/", response_model=List[UserResponse])  #  Use Pydantic Model Instead
 def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users  # FastAPI will convert SQLAlchemy objects to Pydantic automatically
