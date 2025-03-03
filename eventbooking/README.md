@@ -141,4 +141,4 @@ python notification_service.py
 ---
 
 ## Jira 
-![Jira](jira issues.jpg)
+![Jira](jira_issues.jpg)
