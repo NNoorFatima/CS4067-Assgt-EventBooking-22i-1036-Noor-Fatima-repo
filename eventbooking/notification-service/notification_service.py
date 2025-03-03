@@ -5,6 +5,8 @@ import os
 from flask import Flask, jsonify
 from pymongo import MongoClient
 from datetime import datetime
+from pymongo import MongoClient
+from bson import ObjectId  # Import this to convert MongoDB ObjectId
 
 
 
@@ -66,7 +68,16 @@ run_consumer_thread()
 # API to Fetch Notifications for a User
 @app.route("/notifications/<user_id>", methods=["GET"])
 def get_notifications(user_id):
+    """Retrieve all notifications for a given user ID"""
+    
+    # 🔹 Ensure user_id is treated as INT if needed
+    try:
+        user_id = int(user_id)  # Convert to integer
+    except ValueError:
+        pass  # Keep it as string if conversion fails
+
     notifications = list(notifications_collection.find({"user_id": user_id}, {"_id": 0}))
+    
     return jsonify(notifications), 200
 
 # Run Flask App

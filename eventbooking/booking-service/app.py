@@ -3,6 +3,29 @@ from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
 from flask_cors import CORS
+import pika 
+import json 
+
+# RabbitMQ Connection
+RABBITMQ_HOST = "localhost"
+QUEUE_NAME = "notifications"
+
+def publish_notification(user_id, booking_id, message):
+    """Publishes a booking notification to RabbitMQ"""
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
+    channel = connection.channel()
+    channel.queue_declare(queue=QUEUE_NAME, durable=True)
+
+    notification = {
+        "user_id": user_id,
+        "booking_id": booking_id,
+        "message": message
+    }
+
+    channel.basic_publish(exchange='', routing_key=QUEUE_NAME, body=json.dumps(notification))
+    connection.close()
+    print(f" Notification published for user {user_id}")
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
@@ -67,7 +90,7 @@ def create_booking():
 
 
 
-@app.route('/bookings', methods=['GET'])  # ✅ Add GET request support
+@app.route('/bookings', methods=['GET'])  #  Add GET request support
 def get_bookings():
     bookings = Booking.query.all()
     return jsonify([{
@@ -94,6 +117,8 @@ def process_payment():
         booking.payment_status = "Paid"
         booking.status = "Confirmed"  # Booking is confirmed after successful payment
         db.session.commit()
+        publish_notification(booking.user_id, booking.id, "Your booking has been confirmed!")
+
         return jsonify({"message": "Payment successful!", "booking_id": booking.id, "status": booking.status}), 200
     else:
         booking.payment_status = "Failed"
@@ -101,6 +126,6 @@ def process_payment():
         return jsonify({"message": "Payment failed. Please try again.", "booking_id": booking.id, "status": booking.status}), 400
 
 
-# ✅ Move `if __name__ == "__main__":` to the end
+#  Move `if __name__ == "__main__":` to the end
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
