@@ -1,0 +1,13 @@
+# Spring Boot Dependencies (Managed via Maven in pom.xml)
+
+spring-boot-starter-web             # Provides core web functionalities for REST API
+spring-boot-starter-data-mongodb     # Enables integration with MongoDB (Atlas support)
+spring-boot-starter-actuator         # Adds monitoring and management endpoints
+spring-boot-starter-validation       # Enables request validation for API inputs
+spring-boot-starter-security         # Provides security features (authentication, authorization)
+spring-boot-starter-test             # Testing support for unit and integration tests
+spring-boot-devtools                 # Enables hot reload for faster development
+lombok                               # Reduces boilerplate code with annotations (@Getter, @Setter)
+spring-boot-starter-amqp             # (Optional) Enables RabbitMQ messaging support
+springdoc-openapi-starter-webmvc-ui  # Generates API documentation with Swagger UI
+mongodb-driver-sync                  # Required for connecting to MongoDB Atlas

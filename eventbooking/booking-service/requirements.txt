@@ -1,0 +1,5 @@
+Flask==3.0.0                   # Lightweight web framework for handling HTTP requests
+Flask-SQLAlchemy==3.1.1        # ORM (Object Relational Mapper) for database interaction
+Flask-Cors==4.0.0              # Enables Cross-Origin Resource Sharing (CORS) for frontend communication
+requests==2.31.0               # Allows making HTTP requests to other microservices (Event & User services)
+psycopg2-binary==2.9.9         # PostgreSQL database adapter for Python
