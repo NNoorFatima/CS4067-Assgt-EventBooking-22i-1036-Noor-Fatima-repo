@@ -5,7 +5,7 @@ This project is a **Microservices-based Online Event Booking Platform** that ena
 
 1. **User Service** (FastAPI, PostgreSQL) - Manages user registration, authentication, and login.
 2. **Event Service** (Spring Boot, MongoDB Atlas) - Handles event creation, retrieval, and management.
-3. **Booking Service** (Flask, PostgreSQL) - Processes event bookings and payments.
+3. **Booking Service** (Flask, PostgreSQL) - Processes event bookings, manages event capacity, and handles payments.
 4. **Notification Service** (Flask, MongoDB) - Sends booking notifications asynchronously using RabbitMQ.
 
 ---
@@ -52,6 +52,8 @@ mvn spring-boot:run
 #### **Booking Service (Flask)**
 ```sh
 cd booking-service
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
@@ -66,6 +68,7 @@ python notification_service.py
 ---
 
 ## API Endpoints
+
 ### **User Service (FastAPI)**
 | Method | Endpoint             | Description            |
 |--------|----------------------|------------------------|
@@ -81,10 +84,19 @@ python notification_service.py
 | `GET`  | `/api/events/{id}` | Get event by ID |
 
 ### **Booking Service (Flask)**
-| Method | Endpoint           | Description |
-|--------|------------------|-------------|
-| `POST` | `/bookings`       | Book an event |
-| `GET`  | `/bookings/{id}` | Get booking details |
+| Method | Endpoint                     | Description |
+|--------|------------------------------|-------------|
+| `POST` | `/bookings`                   | Book an event (Checks event capacity before confirming) |
+| `GET`  | `/bookings/{id}`               | Get booking details |
+| `POST` | `/payments`                    | Process a payment for a booking |
+| `PUT`  | `/api/events/{event_id}/decrease_capacity` | Decrease event capacity upon booking |
+
+**Booking Flow:**
+1. **User selects an event** → Booking request sent to Booking Service.
+2. **Booking Service validates availability** by checking event capacity from **Event Service**.
+3. **Capacity is updated** in Event Service after successful booking.
+4. **Payment is processed** (Mock payment gateway in Booking Service).
+5. **Notification Service** receives the booking confirmation via **RabbitMQ**.
 
 ### **Notification Service (Flask + RabbitMQ)**
 | Method | Endpoint           | Description |
@@ -93,5 +105,40 @@ python notification_service.py
 
 ---
 
+## Database Schema
 
+### **Booking Service (PostgreSQL)**
+**Table: `bookings`**
+| Column         | Type          | Description |
+|---------------|--------------|-------------|
+| `id`          | `INTEGER` (PK) | Unique Booking ID |
+| `user_id`     | `INTEGER`     | ID of the user who booked |
+| `event_id`    | `TEXT`        | Associated event ID |
+| `status`      | `TEXT`        | Status (Pending/Confirmed) |
+| `payment_status` | `TEXT`    | Payment Status (Paid/Failed) |
+| `created_at`  | `TIMESTAMP`   | Booking timestamp |
 
+---
+
+## Frontend
+
+- Built with **HTML, CSS, JavaScript**.
+- **Event Service Frontend** allows users to **view events and create events**.
+- **Booking Service Frontend** allows users to **book events and process payments**.
+
+---
+
+## Features & Enhancements
+-  **Microservices architecture** with RESTful communication.
+-  **RabbitMQ for async notifications**.
+-  **JWT-based authentication for User Service**.
+-  **Event capacity management** (reduces event slots on booking).
+-  **Mock payment gateway for bookings**.
+-  **Future Enhancements**:
+  - Integrate **actual payment gateway** (e.g., Stripe, PayPal).
+  - Implement **admin dashboard** for event organizers.
+
+---
+
+## Jira 
+![Alt Text](jira issues.jpg)
