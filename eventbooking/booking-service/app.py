@@ -2,9 +2,10 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # PostgreSQL Database Connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0434@localhost/bookingservice'
@@ -29,7 +30,7 @@ with app.app_context():
 def health_check():
     return jsonify({"message": "Booking Service is running!"})
 
-# ✅ Move this above `if __name__ == "__main__":`
+
 EVENT_SERVICE_URL = "http://localhost:8080/api/events/"  # Update with actual Event Service URL
 
 @app.route('/bookings', methods=['POST'])
@@ -40,7 +41,7 @@ def create_booking():
     if not event_id:
         return jsonify({"error": "Event ID is required"}), 400
 
-    # ✅ Use the correct Event Service URL (8080)
+    # Use the correct Event Service URL (8080)
     event_response = requests.get(f"{EVENT_SERVICE_URL}{event_id}")
 
     if event_response.status_code != 200:
@@ -55,9 +56,26 @@ def create_booking():
     db.session.add(new_booking)
     db.session.commit()
 
+    # decrese capacity 
+    update_response = requests.put(f"{EVENT_SERVICE_URL}{event_id}/decrease_capacity")
+    if update_response.status_code != 200:
+        print("Failed to update event capacity:", update_response.json())  # Debugging log
+        return jsonify({"error": "Failed to update event capacity"}), 500
+
     return jsonify({"booking_id": new_booking.id, "status": "Pending"}), 201
 
 
+
+
+@app.route('/bookings', methods=['GET'])  # ✅ Add GET request support
+def get_bookings():
+    bookings = Booking.query.all()
+    return jsonify([{
+        "id": b.id,
+        "user_id": b.user_id,
+        "event_id": b.event_id,
+        "status": b.status
+    } for b in bookings])
 
 @app.route('/payments', methods=['POST'])
 def process_payment():

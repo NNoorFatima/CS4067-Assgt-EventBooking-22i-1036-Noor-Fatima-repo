@@ -3,8 +3,8 @@ const EVENT_SERVICE_URL = "http://localhost:8080/api/events"; // URL for Event S
 
 document.addEventListener("DOMContentLoaded", function () {
     const eventList = document.getElementById("event-list");
-    let events = JSON.parse(localStorage.getItem("eventsData"));  // Get stored events
-
+   // let events = JSON.parse(localStorage.getItem("eventsData"));  // Get stored events
+    let events; //bhai fetch regardless 
     if (!events || events.length === 0) {
         console.warn("No events found in localStorage. Fetching from Event Service...");
         fetch(EVENT_SERVICE_URL)

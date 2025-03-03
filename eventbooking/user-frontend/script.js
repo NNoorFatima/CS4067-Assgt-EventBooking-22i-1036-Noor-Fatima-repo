@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
-
+           // localStorage.setItem("loggedInUserId",)
             const response = await fetch(`${API_BASE_URL}/users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -49,8 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const result = await response.json();
+            console.log("Login API Response:", result);  
             if (response.ok) {
-
+                localStorage.setItem("loggedInUserId",result.id);
                 localStorage.setItem("token", result.access_token);
                 //alert("Login successful! Redirecting to dashboard...");
                 ///window.location.href = "dashboard.html";
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (choice) { //eventbooking\event-frontend\index.html
                     window.location.href = "../event-frontend/index.html"; // Redirect to Add Event
                 } else {
-                    window.location.href = "dashboard.html"; // Redirect to Book Event
+                    window.location.href = "../booking-frontend/events.html"; // Redirect to Book Event
                 }
             } else {
                 document.getElementById("loginMessage").innerText = "Invalid credentials!";
@@ -70,28 +71,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Fetch User Info (Dashboard)
-document.addEventListener("DOMContentLoaded", function () {
-    if (window.location.pathname.includes("dashboard.html")) {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            window.location.href = "login.html";
-        } else {
-            fetch(`${API_BASE_URL}/users/me`, {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("userInfo").innerText = `Welcome, ${data.username}!`;
-            })
-            .catch(() => {
-                alert("Unauthorized access!");
-                window.location.href = "login.html";
-            });
-        }
-    }
-});
+// // Fetch User Info (Dashboard)
+// document.addEventListener("DOMContentLoaded", function () {
+//     if (window.location.pathname.includes("dashboard.html")) {
+//         const token = localStorage.getItem("token");
+//         if (!token) {
+//             window.location.href = "login.html";
+//         } else {
+//             fetch(`${API_BASE_URL}/users/me`, {
+//                 method: "GET",
+//                 headers: { "Authorization": `Bearer ${token}` }
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 document.getElementById("userInfo").innerText = `Welcome, ${data.username}!`;
+//             })
+//             .catch(() => {
+//                 alert("Unauthorized access!");
+//                 window.location.href = "login.html";
+//             });
+//         }
+//     }
+// });
 
 //logout Function
 function logout() {
