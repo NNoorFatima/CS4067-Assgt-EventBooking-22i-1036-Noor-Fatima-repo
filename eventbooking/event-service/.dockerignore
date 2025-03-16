@@ -1,0 +1,8 @@
+target/
+*.jar
+*.war
+*.class
+*.log
+*.md
+*.git
+.DS_Store
