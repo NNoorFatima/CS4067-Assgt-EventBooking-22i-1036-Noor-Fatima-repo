@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             document.getElementById("registerMessage").innerText = result.message;
         } catch(error) {
-            nsole.error("Registration failed:", error);
+            connsole.error("Registration failed:", error);
             alert("Error registering. Check console for details.");
         }
         });
