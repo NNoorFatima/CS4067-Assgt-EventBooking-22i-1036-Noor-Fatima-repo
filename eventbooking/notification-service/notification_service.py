@@ -21,7 +21,8 @@ db = client["notification_service"]
 notifications_collection = db["notifications"]
 
 # RabbitMQ Connection
-RABBITMQ_HOST = "localhost"
+# RABBITMQ_HOST = "localhost"
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
 QUEUE_NAME = "notifications"
 
 def connect_to_rabbitmq():
@@ -53,7 +54,8 @@ def callback(ch, method, properties, body):
 def start_rabbitmq_consumer():
     connection, channel = connect_to_rabbitmq()
     channel.basic_consume(queue=QUEUE_NAME, on_message_callback=callback)
-    print(" [*] Waiting for messages from RabbitMQ. To exit press CTRL+C")
+    # print(" [*] Waiting for messages from RabbitMQ. To exit press CTRL+C")
+    print(" [*] Waiting for messages from RabbitMQ. To exit press CTRL+C", flush=True)
     channel.start_consuming()
 
 # Run RabbitMQ Consumer in a Separate Thread
@@ -62,8 +64,8 @@ def run_consumer_thread():
     consumer_thread.daemon = True
     consumer_thread.start()
 
-# Start Consumer when Flask App Starts
-run_consumer_thread()
+# # Start Consumer when Flask App Starts
+# run_consumer_thread()
 
 # API to Fetch Notifications for a User
 @app.route("/notifications/<user_id>", methods=["GET"])
@@ -82,4 +84,10 @@ def get_notifications(user_id):
 
 # Run Flask App
 if __name__ == "__main__":
-    app.run(port=5003, debug=True)
+    run_consumer_thread()  # 👈 Start thread here
+    app.run(host="0.0.0.0", port=5003, debug=True, use_reloader=False)
+
+
+    # app.run(host="0.0.0.0", port=5003, debug=True)
+
+    #app.run(port=5003, debug=True)

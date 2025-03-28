@@ -4,7 +4,7 @@ ujson==5.10.0
 watchfiles==1.0.4
 alembic==1.14.1  # Database migrations
 aniso8601==10.0.0  # Date/time parsing
-anyio==4.8.0  # Async networking support
+anyio==3.7.1 # Async networking support
 bcrypt==4.2.1  # Secure password hashing
 click==8.1.8  # Command-line interface (CLI) tools
 cryptography==44.0.1  # Secure cryptographic functions
@@ -19,3 +19,5 @@ SQLAlchemy==2.0.38  # ORM for PostgreSQL database
 starlette==0.45.3  # Web framework used by FastAPI
 uvicorn==0.34.0  # ASGI server to run FastAPI
 psycopg2-binary==2.9.10  # PostgreSQL database driver
+httpx==0.27.0
+
