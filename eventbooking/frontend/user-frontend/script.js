@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://127.0.0.1:8000";  // FastAPI Backend URL
+// const API_BASE_URL = "http://127.0.0.1:8000";  // FastAPI Backend URL
+const API_BASE_URL = "/api/user";  // This goes through NGINX
 
 //Register User
 document.addEventListener("DOMContentLoaded", function () {

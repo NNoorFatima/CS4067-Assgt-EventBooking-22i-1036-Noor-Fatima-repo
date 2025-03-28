@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("confirm-booking").addEventListener("click", async () => {
         try {
-            let response = await fetch("http://localhost:5001/bookings", {
+            let response = await fetch("/api/booking/bookings", {
+
+            //fetch("http://localhost:5001/bookings", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userId, event_id: eventId })

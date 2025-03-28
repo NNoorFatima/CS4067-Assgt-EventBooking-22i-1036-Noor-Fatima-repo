@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const bookingId = localStorage.getItem("bookingId");
 
-    fetch("http://localhost:5001/payments", {
+    //fetch("http://localhost:5001/payments", {
+    fetch("/api/booking/payments", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ booking_id: bookingId })

@@ -1,0 +1,28 @@
+# Ignore node_modules if the front-end is using Node.js
+node_modules/
+
+# Ignore any build or distribution folders (if front-end uses build tools)
+build/
+dist/
+
+# Ignore IDE/editor-specific files
+.idea/
+.vscode/
+
+# Ignore git metadata and gitignore files
+.git/
+.gitignore
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore environment files (if any, e.g., .env)
+.env
+
+# Ignore any compiled or temporary files (e.g., .DS_Store on macOS)
+.DS_Store
+
+# Ignore Dockerfile and .dockerignore files themselves (they don't need to be inside the image)
+Dockerfile
+.dockerignore

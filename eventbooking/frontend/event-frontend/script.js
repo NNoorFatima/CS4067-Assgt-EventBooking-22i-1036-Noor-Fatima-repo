@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8080/api/events";
+// const API_URL = "http://localhost:8080/api/events";
+const API_URL = "/api/event/api/events";
 
 document.addEventListener("DOMContentLoaded",() =>{ //wait for the page to load
     loadEvents(); //fetch and display events
