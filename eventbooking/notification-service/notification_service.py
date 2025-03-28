@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId  # Import this to convert MongoDB ObjectId
+from flask_cors import CORS
 
 
 
@@ -14,6 +15,7 @@ MONGO_URI = "mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/?retryWr
 
 # Flask App
 app = Flask(__name__)
+CORS(app)  # Allow all domains to access the backend
 
 # MongoDB Atlas Connection
 client = MongoClient(MONGO_URI)
