@@ -1,6 +1,22 @@
-*.war
+# Ignore compiled files
 *.class
+*.jar
+*.war
 *.log
-*.md
-*.git
+
+# Ignore Maven & IDE files
+target/
+.mvn/
+.idea/
+*.iml
+
+# Ignore Git & system files
+.git/
+.gitignore
 .DS_Store
+
+# Ignore any other unnecessary files
+*.md
+*.yml
+*.yaml
+*.properties
