@@ -8,7 +8,7 @@ from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId  # Import this to convert MongoDB ObjectId
 from flask_cors import CORS
-
+import time
 
 
 MONGO_URI = "mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -24,14 +24,25 @@ notifications_collection = db["notifications"]
 
 # RabbitMQ Connection
 # RABBITMQ_HOST = "localhost"
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "rabbitmq")  # Default to 'rabbitmq' as it's the service name in Docker Compose
 QUEUE_NAME = "notifications"
 
 def connect_to_rabbitmq():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
-    channel = connection.channel()
-    channel.queue_declare(queue=QUEUE_NAME, durable=True)
-    return connection, channel
+    # connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
+    # channel = connection.channel()
+    # channel.queue_declare(queue=QUEUE_NAME, durable=True)
+    # return connection, channel
+    for i in range(10):  # Retry up to 10 times
+        try:
+            connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
+            channel = connection.channel()
+            channel.queue_declare(queue=QUEUE_NAME, durable=True)
+            print("✅ Connected to RabbitMQ")
+            return connection, channel
+        except pika.exceptions.AMQPConnectionError as e:
+            print(f"❗ RabbitMQ not ready yet, retrying in 5s... ({i+1}/10)")
+            time.sleep(5)
+    raise Exception("❌ Could not connect to RabbitMQ after several attempts")
 
 # Function to Handle Received Messages
 def callback(ch, method, properties, body):

@@ -1,5 +1,5 @@
 // const EVENT_SERVICE_URL = "http://localhost:8080/api/events"; // URL for Event Service
-const EVENT_SERVICE_URL = "/api/event/api/events";
+const EVENT_SERVICE_URL = "/api/event/events";
 
 
 document.addEventListener("DOMContentLoaded", function () {

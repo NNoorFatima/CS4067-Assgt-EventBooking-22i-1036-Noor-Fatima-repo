@@ -1,0 +1,148 @@
+version: '3.9'
+
+services:
+  # User Service with PostgreSQL
+  user-service:
+    image: user-service
+    container_name: user-service
+    environment:
+      - DATABASE_URL=postgresql://postgres:0434@host.docker.internal:5432/Users
+    ports:
+      - "8000:8000"
+    networks:
+      - eventbooking_network
+    depends_on:
+      - postgres-user
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Booking Service with PostgreSQL
+  booking-service:
+    image: booking-service
+    container_name: booking-service
+    environment:
+      - DATABASE_URL=postgresql://postgres:0434@host.docker.internal:5432/bookingservice
+    ports:
+      - "5001:5001"
+    networks:
+      - eventbooking_network
+    depends_on:
+      - postgres-booking
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Event Service with MongoDB Atlas
+  event-service:
+    image: event-service
+    container_name: event-service
+    environment:
+      - spring.data.mongodb.uri=mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/event_service?retryWrites=true&w=majority&appName=Cluster0
+    ports:
+      - "8080:8080"
+    networks:
+      - eventbooking_network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Notification Service with MongoDB Atlas
+  notification-service:
+    image: notification-service
+    container_name: notification-service
+    environment:
+      - MONGO_URI=mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0  # MongoDB Atlas connection string
+      - RABBITMQ_HOST=rabbitmq 
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5003:5003"
+    networks:
+      - eventbooking_network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Frontend (Nginx for static files serving)
+  multi-frontend:
+    image: multi-frontend-image
+    container_name: multi-frontend-container
+    ports:
+      - "8085:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - eventbooking_network
+    restart: always
+    depends_on:
+      - user-service
+      - booking-service
+      - notification-service
+      - event-service
+
+
+  # PostgreSQL DB for User Service
+  postgres-user:
+    image: postgres:latest
+    container_name: postgres-user
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0434
+      - POSTGRES_DB=Users
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - eventbooking_network
+    restart: always
+
+  # PostgreSQL DB for Booking Service
+  postgres-booking:
+    image: postgres:latest
+    container_name: postgres-booking
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0434
+      - POSTGRES_DB=Bookings
+    volumes:
+      - postgres-booking-data:/var/lib/postgresql/data
+    networks:
+      - eventbooking_network
+    restart: always
+
+  # RabbitMQ (as the message broker)
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - eventbooking_network
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  eventbooking_network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  postgres-booking-data:

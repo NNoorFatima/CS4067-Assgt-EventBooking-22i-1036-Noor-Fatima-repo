@@ -9,7 +9,7 @@ const apiErrorEl = document.getElementById('api-error');
 
 // API URL
 // const API_URL = 'http://localhost:5003';
-const API_URL = '/api/notification';
+const API_URL = "/api/notification";
 
 // Event listeners
 loadNotificationsBtn.addEventListener('click', fetchNotifications);

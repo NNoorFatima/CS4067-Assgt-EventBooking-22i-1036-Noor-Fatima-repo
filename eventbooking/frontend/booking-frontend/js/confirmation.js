@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const bookingId = localStorage.getItem("bookingId");
 
     //fetch("http://localhost:5001/payments", {
-    fetch("/api/booking/payments", {
+    //fetch("/api/booking/payments", {
+    fetch("api/booking/payments", {  // Use NGINX routing path for payment service
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
