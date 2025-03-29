@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //fetch("http://localhost:5001/payments", {
     //fetch("/api/booking/payments", {
-    fetch("api/booking/payments", {  // Use NGINX routing path for payment service
+    fetch("/api/booking/payments", {  // Use NGINX routing path for payment service
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("✅ Payment response:", data);
+
         document.getElementById("payment-status").innerText = data.message;
     })
     .catch(error => console.error("Error processing payment:", error));

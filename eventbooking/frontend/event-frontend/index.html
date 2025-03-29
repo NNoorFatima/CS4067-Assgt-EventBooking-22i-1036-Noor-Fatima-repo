@@ -6,6 +6,142 @@
     <title>Event Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<style>
+    /* General Styles */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #121212;  /* Dark Background */
+    color: #FFFFFF;  /* White Text */
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+/* Form Styling */
+.form-container {
+    width: 350px;
+    max-width: 100%;
+    background-color: #1E1E1E; /* Dark Gray */
+    padding: 20px;
+    margin: 50px auto;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    background-color: #1E1E1E; /* Dark Gray */
+    color: #FFFFFF; /* White Text */
+    padding: 10px;
+    width: 90%;
+    max-width: 325px;
+    margin-bottom: 15px;
+    border: 1px solid #333333; /* Darker border */
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input::placeholder {
+    color: #BBBBBB;
+}
+
+/* Button Styling */
+button {
+    background-color: #007BFF; /* Bright blue */
+    color: white;
+    padding: 10px;
+    width: 100%;
+    max-width: 150px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Link Styling */
+a {
+    color: #007BFF;  /* Blue links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #b3004e;
+}
+
+/* List Styling for Events & Users */
+ul {
+    list-style: none;
+    padding: 0;
+    width: 90%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+li {
+    background-color: #1E1E1E;
+    padding: 15px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+/* Event & User Title */
+li strong {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+/* Delete Button inside List */
+li button {
+    background-color: #DC3545; /* Red Delete Button */
+    padding: 8px 12px;
+    font-size: 14px;
+    width: auto;
+    transition: background 0.3s ease;
+}
+
+li button:hover {
+    background-color: #b3001b;
+}
+
+/* Headings */
+h1, h2 {
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+/* Container for List */
+.list-container {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    background-color: #1E1E1E;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+</style>
+
+
 <body>
     <h1>Event Management</h1>
 

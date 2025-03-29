@@ -1,5 +1,7 @@
 // const API_BASE_URL = "http://127.0.0.1:8000";  // FastAPI Backend URL
-const API_USER_BASE_URL = "/api/user";  // Base URL for user-related API calls
+console.log("Loaded script.js");
+
+const API_BASE_URL = "/api/user";  // Base URL for user-related API calls
 
 //Register User
 document.addEventListener("DOMContentLoaded", function () {
@@ -43,7 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
            // localStorage.setItem("loggedInUserId",)
-            const response = await fetch(`${API_BASE_URL}/users/login`, {
+            // const response = await fetch(`${API_BASE_URL}/users/login`, {
+                const response = await fetch(`${API_BASE_URL}/users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password })
@@ -61,9 +64,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 let choice = confirm("Login Successful! \nDo you want to Add an Event or Book an Event?\n\nClick 'OK' for Add Event, 'Cancel' for Book Event.");
 
                 if (choice) { //eventbooking\event-frontend\index.html
-                    window.location.href = "../event-frontend/index.html"; // Redirect to Add Event
+                   // window.location.href = "../event-frontend/index.html"; // Redirect to Add Event
+                    window.location.href = "/event/"; // Redirect to Add Event
                 } else {
-                    window.location.href = "../booking-frontend/events.html"; // Redirect to Book Event
+                    // window.location.href = "../booking-frontend/events.html"; // Redirect to Book Event
+                    window.location.href = "/booking/"; // Redirect to Add Event
                 }
             } else {
                 document.getElementById("loginMessage").innerText = "Invalid credentials!";

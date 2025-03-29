@@ -1,17 +1,22 @@
-# Use official NGINX image as base image
+# Use official NGINX image
 FROM nginx:alpine
 
-# Copy the NGINX configuration file
+# Delete default nginx config to avoid conflicts
+# Remove default html and config
+RUN rm -rf /usr/share/nginx/html/* \
+    && rm /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy each frontend module to appropriate directory
-COPY ./booking-frontend /usr/share/nginx/html/booking-frontend
-COPY ./event-frontend /usr/share/nginx/html/event-frontend
-COPY ./notification-frontend /usr/share/nginx/html/notification-frontend
-COPY ./user-frontend /usr/share/nginx/html/user-frontend
 
-# Expose port 80 for HTTP traffic
+# Copy static frontend files
+COPY ./booking-frontend /usr/share/nginx/html/booking
+COPY ./event-frontend /usr/share/nginx/html/event
+COPY ./notification-frontend /usr/share/nginx/html/notification
+COPY user-frontend /usr/share/nginx/html/user
+
+# Expose port 80
 EXPOSE 80
 
-# Start NGINX when the container runs
+# Run NGINX
 CMD ["nginx", "-g", "daemon off;"]

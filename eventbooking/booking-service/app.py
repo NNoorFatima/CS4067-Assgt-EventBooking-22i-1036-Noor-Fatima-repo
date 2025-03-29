@@ -144,7 +144,8 @@ def process_payment():
         return jsonify({"error": "Booking not found"}), 404
 
     # Simulate payment success or failure
-    payment_success = random.choice([True, False])
+    # payment_success = random.choice([True, False]) NAH WE BELIEVE ONLY IN SUCCESS
+    payment_success = True
 
     if payment_success:
         booking.payment_status = "Paid"

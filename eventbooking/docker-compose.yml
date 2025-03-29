@@ -1,12 +1,16 @@
-version: '3.9'
+# version: '3.9'
 
 services:
   # User Service with PostgreSQL
   user-service:
-    image: user-service
+    # image: user-service
+    build:
+      context: ./user-service
     container_name: user-service
-    environment:
-      - DATABASE_URL=postgresql://postgres:0434@host.docker.internal:5432/Users
+    env_file:
+      - ./user-service/.env
+    # environment:
+    #   - DATABASE_URL=postgresql://postgres:0434@host.docker.internal:5432/Users
     ports:
       - "8000:8000"
     networks:
@@ -22,7 +26,9 @@ services:
 
   # Booking Service with PostgreSQL
   booking-service:
-    image: booking-service
+    # image: booking-service
+    build:
+      context: ./booking-service
     container_name: booking-service
     environment:
       - DATABASE_URL=postgresql://postgres:0434@host.docker.internal:5432/bookingservice
@@ -41,7 +47,9 @@ services:
 
   # Event Service with MongoDB Atlas
   event-service:
-    image: event-service
+    # image: event-service
+    build:
+      context: ./event-service
     container_name: event-service
     environment:
       - spring.data.mongodb.uri=mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/event_service?retryWrites=true&w=majority&appName=Cluster0
@@ -58,7 +66,9 @@ services:
 
   # Notification Service with MongoDB Atlas
   notification-service:
-    image: notification-service
+    # image: notification-service
+    build:
+      context: ./notification-service
     container_name: notification-service
     environment:
       - MONGO_URI=mongodb+srv://Event-Service:123@cluster0.ieune.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0  # MongoDB Atlas connection string
@@ -79,12 +89,14 @@ services:
 
   # Frontend (Nginx for static files serving)
   multi-frontend:
-    image: multi-frontend-image
-    container_name: multi-frontend-container
+    # image: multi-frontend-container
+    build:
+      context: ./frontend
+    container_name: frontend
     ports:
       - "8085:80"
-    volumes:
-      - ./frontend:/usr/share/nginx/html
+    # volumes:
+      # - ./frontend:/usr/share/nginx/html
     networks:
       - eventbooking_network
     restart: always
